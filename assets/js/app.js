@@ -786,3 +786,30 @@ function getProcessColor(pid) {
     };
     return colors[pid] || '#4ade80';
 }
+
+// =================== AUDIO TOGGLE ===================
+let audioEnabled = false;
+
+window.toggleAudio = async function() {
+    if (!window.audioEngine) return;
+    
+    audioEnabled = !audioEnabled;
+    
+    // Resume audio context (browsers require user gesture)
+    await window.audioEngine.ensureRunning();
+    window.audioEngine.setEnabled(audioEnabled);
+    
+    // Update button visual
+    const btn = document.getElementById('audioToggleBtn');
+    if (btn) {
+        if (audioEnabled) {
+            btn.innerHTML = '🔊 Sound: On';
+            btn.classList.add('audio-on');
+            // Play a confirm click
+            window.audioEngine.playClick();
+        } else {
+            btn.innerHTML = '🔇 Sound: Off';
+            btn.classList.remove('audio-on');
+        }
+    }
+};

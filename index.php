@@ -277,6 +277,9 @@
                         <span class="view-3d-title-badge">WebGL</span>
                     </div>
                     <div class="view-3d-controls">
+                        <button class="step-btn" id="audioToggleBtn" onclick="window.toggleAudio()" title="Toggle ambient sound">
+                            🔇 Sound: Off
+                        </button>
                         <button class="step-btn" onclick="window.replay3D()">
                             🔁 Replay
                         </button>
@@ -325,6 +328,7 @@
 
 </main>
 
+<script src="assets/js/audio.js"></script>
 <script src="assets/js/gantt.js"></script>
 <script src="assets/js/gantt3d.js"></script>
 <script src="assets/js/bar3d.js"></script>

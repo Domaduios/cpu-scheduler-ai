@@ -1886,3 +1886,11 @@ button, input { font-family: inherit; }
 @media (max-width: 600px) {
     .three-d-mode-toggle { flex-direction: column; }
 }
+
+/* Audio toggle button */
+.step-btn.audio-on {
+    background: linear-gradient(135deg, var(--green-500), var(--green-600));
+    color: #0a1f10;
+    border-color: var(--green-400);
+    font-weight: 700;
+}

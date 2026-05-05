@@ -306,7 +306,7 @@ class Gantt3D {
         const progress = Math.min(elapsed / this.animationDuration, 1);
         
         // Animate bars one by one based on their start time
-        this.bars.forEach(bar => {
+        this.bars.forEach((bar, idx) => {
             const segStart = bar.userData.start;
             const segEnd = bar.userData.end;
             const segDuration = bar.userData.duration;
@@ -328,6 +328,14 @@ class Gantt3D {
                 bar.position.y = bar.userData.originalY * eased;
                 // Glow pulse while growing
                 bar.material.emissiveIntensity = 0.3 + Math.sin(elapsed * 0.01) * 0.2;
+                
+                // 🔊 Play sound when bar JUST started rising (only fire once per bar)
+                if (!bar.userData.soundPlayed && window.audioEngine) {
+                    bar.userData.soundPlayed = true;
+                    // Vary pitch by bar index so it sounds musical, not monotonous
+                    const pitchVar = (idx % 5) - 2; // -2 to +2
+                    window.audioEngine.playBarTick(pitchVar);
+                }
             } else {
                 // Finished
                 bar.scale.y = 1;
@@ -347,6 +355,7 @@ class Gantt3D {
             bar.scale.y = 1;
             bar.position.y = bar.userData.originalY;
             bar.material.emissiveIntensity = 0.3;
+            bar.userData.soundPlayed = true; // Don't play sound on instant show
         });
     }
     
@@ -355,6 +364,7 @@ class Gantt3D {
         this.bars.forEach(bar => {
             bar.scale.y = 0.01;
             bar.position.y = 0.01;
+            bar.userData.soundPlayed = false; // Allow sound to play again
         });
         this.startAnimation();
     }

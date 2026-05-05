@@ -561,6 +561,12 @@ class Podium3D {
         if (this.animating) {
             const progress = Math.min(elapsed / 2000, 1);
             
+            // 🔊 Play deep ceremonial rumble RIGHT when animation starts
+            if (!this.rumblePlayed && window.audioEngine) {
+                this.rumblePlayed = true;
+                window.audioEngine.playPodiumRumble();
+            }
+            
             // Podiums rise up (first 60% of animation)
             this.podiums.forEach((podium, i) => {
                 const delay = i * 0.08;
@@ -582,6 +588,20 @@ class Podium3D {
                 const eased = 1 - Math.pow(1 - localProg, 3);
                 
                 sphere.scale.set(eased, eased, eased);
+                
+                // 🔊 Play chime when each sphere first becomes visible
+                if (!sphere.userData.chimePlayed && eased > 0.15 && window.audioEngine) {
+                    sphere.userData.chimePlayed = true;
+                    
+                    if (sphere.userData.isWinner) {
+                        // Winner gets the triumphant fanfare!
+                        window.audioEngine.playWinnerFanfare();
+                    } else {
+                        // Other ranks get a chime, pitch based on rank
+                        const rank = sphere.userData.entry.rank;
+                        window.audioEngine.playSphereChime(rank, this.ranked.length);
+                    }
+                }
             });
             
             if (progress >= 1) {
@@ -607,6 +627,18 @@ class Podium3D {
                 sphere.userData.halo.material.opacity = baseOpacity * pulseFactor;
             }
         });
+        
+        // 🔊 Random sparkle sounds during winner's particle animation
+        if (!this.animating && window.audioEngine && this.recommended) {
+            // Play a subtle sparkle every ~3-5 seconds
+            const now = performance.now();
+            if (!this.lastSparkle) this.lastSparkle = now;
+            const sparkleDelay = 2500 + Math.random() * 2500;
+            if (now - this.lastSparkle > sparkleDelay) {
+                window.audioEngine.playSparkle();
+                this.lastSparkle = now;
+            }
+        }
         
         // Animate connecting beams (pulsing energy)
         this.rays.forEach((line, i) => {
@@ -648,7 +680,11 @@ class Podium3D {
             p.scale.set(0.01, 0.01, 0.01);
             if (p.userData.cap) p.userData.cap.scale.set(0.01, 0.01, 0.01);
         });
-        this.spheres.forEach(s => s.scale.set(0.01, 0.01, 0.01));
+        this.spheres.forEach(s => {
+            s.scale.set(0.01, 0.01, 0.01);
+            s.userData.chimePlayed = false; // Reset to allow chime to play again
+        });
+        this.rumblePlayed = false; // Reset rumble flag
         this.animationStartTime = performance.now();
         this.animating = true;
     }
