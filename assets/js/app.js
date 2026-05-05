@@ -29,6 +29,8 @@ const VIEW_TITLES = {
     'ai': { title: 'AI Recommendation', sub: 'Decision engine analysis with multi-criteria scoring' },
     'comparison': { title: 'Algorithm Showdown', sub: 'Compare all 4 main algorithms side by side' },
     'charts': { title: 'Performance Visualizations', sub: 'Interactive charts comparing all metrics' },
+    '3d': { title: '3D Visualization', sub: 'Interactive WebGL Gantt Chart · Drag to rotate' },
+    'step': { title: 'Step-by-Step Mode', sub: 'Walk through every CPU tick · See queues in real-time' },
     'details': { title: 'Algorithm Details', sub: 'Deep dive into each algorithm with full Gantt chart' }
 };
 
@@ -67,6 +69,16 @@ function switchView(viewName) {
     // Render charts when entering charts view (Chart.js needs visible canvas)
     if (viewName === 'charts' && lastResults) {
         setTimeout(() => renderAllCharts(lastResults.results), 50);
+    }
+    
+    // Initialize 3D view
+    if (viewName === '3d' && lastResults) {
+        setTimeout(() => init3DView(), 50);
+    }
+    
+    // Initialize Step view
+    if (viewName === 'step' && lastResults) {
+        setTimeout(() => initStepView(), 50);
     }
 }
 
@@ -573,4 +585,204 @@ function showDetailsTabContent(algo) {
             controls: true
         });
     }, 50);
+}
+
+// =================== 3D VIEW ===================
+let current3DAlgo = null;
+let current3DInstance = null;
+let current3DMode = 'gantt'; // 'gantt' or 'bars'
+
+function init3DView() {
+    if (!lastResults) return;
+    
+    // Reset to default mode (Gantt)
+    current3DMode = 'gantt';
+    updateModeButtons();
+    
+    // Build algorithm selector for Gantt mode
+    buildAlgoSelector('threeDAlgoSelector', (algo) => {
+        load3DGantt(algo);
+    });
+    
+    // Load the AI-recommended algorithm by default
+    const defaultAlgo = lastResults.ai.recommended;
+    load3DGantt(defaultAlgo);
+}
+
+function updateModeButtons() {
+    document.querySelectorAll('.three-d-mode-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === current3DMode);
+    });
+    
+    // Show/hide algorithm selector based on mode
+    const selector = document.getElementById('threeDAlgoSelector');
+    if (selector) {
+        selector.style.display = current3DMode === 'gantt' ? 'flex' : 'none';
+    }
+    
+    // Update title
+    const title = document.getElementById('threeDTitle');
+    if (title) {
+        title.textContent = current3DMode === 'gantt' 
+            ? '🎯 3D Gantt Chart' 
+            : '🏆 AI Tournament · Algorithm Rankings';
+    }
+    
+    // Show/hide "Show All" button (only relevant for Gantt)
+    const showAllBtn = document.getElementById('showAllBtn');
+    if (showAllBtn) {
+        showAllBtn.style.display = current3DMode === 'gantt' ? '' : 'none';
+    }
+}
+
+window.switch3DMode = function(mode) {
+    if (mode === current3DMode) return;
+    current3DMode = mode;
+    updateModeButtons();
+    
+    // Dispose current instance
+    if (current3DInstance) {
+        current3DInstance.dispose();
+        current3DInstance = null;
+    }
+    if (window.barChart3DInstance) {
+        window.barChart3DInstance.dispose();
+        window.barChart3DInstance = null;
+    }
+    
+    if (mode === 'gantt') {
+        const algo = current3DAlgo || lastResults.ai.recommended;
+        load3DGantt(algo);
+    } else {
+        loadBarChart3D();
+    }
+};
+
+function buildAlgoSelector(containerId, onSelect) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    const algos = Object.keys(lastResults.results);
+    container.innerHTML = '';
+    
+    algos.forEach(algo => {
+        const pill = document.createElement('button');
+        pill.className = 'algo-pill';
+        pill.dataset.algo = algo;
+        pill.innerHTML = `
+            <span class="pill-dot" style="background: ${ALGO_COLORS[algo]};"></span>
+            ${ALGO_SHORT[algo]}
+        `;
+        pill.onclick = () => {
+            container.querySelectorAll('.algo-pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            onSelect(algo);
+        };
+        container.appendChild(pill);
+    });
+    
+    const recommended = lastResults.ai.recommended;
+    const recPill = container.querySelector(`[data-algo="${recommended}"]`);
+    if (recPill) recPill.classList.add('active');
+}
+
+function load3DGantt(algo) {
+    if (current3DInstance) {
+        current3DInstance.dispose();
+        current3DInstance = null;
+    }
+    if (window.barChart3DInstance) {
+        window.barChart3DInstance.dispose();
+        window.barChart3DInstance = null;
+    }
+    
+    const result = lastResults.results[algo];
+    if (!result) return;
+    
+    current3DAlgo = algo;
+    const canvas = document.getElementById('threeDCanvas');
+    canvas.innerHTML = '';
+    
+    current3DInstance = new Gantt3D(canvas, result.gantt, ALGO_NAMES[algo]);
+    window.gantt3DInstances[algo] = current3DInstance;
+}
+
+function loadBarChart3D() {
+    if (window.barChart3DInstance) {
+        window.barChart3DInstance.dispose();
+        window.barChart3DInstance = null;
+    }
+    if (current3DInstance) {
+        current3DInstance.dispose();
+        current3DInstance = null;
+    }
+    
+    const canvas = document.getElementById('threeDCanvas');
+    canvas.innerHTML = '';
+    
+    window.barChart3DInstance = new Podium3D(
+        canvas,
+        lastResults.results,
+        lastResults.ai.recommended,
+        lastResults.ai.scores
+    );
+}
+
+window.replay3D = function() {
+    if (current3DMode === 'gantt' && current3DInstance) {
+        current3DInstance.replayAnimation();
+    } else if (current3DMode === 'bars' && window.barChart3DInstance) {
+        window.barChart3DInstance.replayAnimation();
+    }
+};
+
+window.showInstant3D = function() {
+    if (current3DInstance) current3DInstance.showInstant();
+};
+
+window.resetCamera3D = function() {
+    if (current3DMode === 'gantt' && current3DInstance) {
+        current3DInstance.resetCamera();
+    } else if (current3DMode === 'bars' && window.barChart3DInstance) {
+        window.barChart3DInstance.resetCamera();
+    }
+};
+
+// =================== STEP MODE ===================
+let currentStepInstance = null;
+
+function initStepView() {
+    if (!lastResults) return;
+    
+    buildAlgoSelector('stepAlgoSelector', (algo) => {
+        loadStepSim(algo);
+    });
+    
+    const defaultAlgo = lastResults.ai.recommended;
+    loadStepSim(defaultAlgo);
+}
+
+function loadStepSim(algo) {
+    // Stop previous if any
+    if (currentStepInstance) {
+        currentStepInstance.stopPlay();
+    }
+    
+    const result = lastResults.results[algo];
+    if (!result) return;
+    
+    const container = document.getElementById('stepSimContainer');
+    container.innerHTML = '';
+    
+    currentStepInstance = new StepSimulatorUI(container, ALGO_NAMES[algo], result);
+}
+
+// Helper for color access from gantt.js
+function getProcessColor(pid) {
+    const colors = {
+        'P1': '#4ade80', 'P2': '#60a5fa', 'P3': '#a78bfa', 'P4': '#fb923c',
+        'P5': '#f472b6', 'P6': '#facc15', 'P7': '#2dd4bf', 'P8': '#f87171',
+        'P9': '#fb7185', 'P10': '#34d399'
+    };
+    return colors[pid] || '#4ade80';
 }

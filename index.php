@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Three.js for 3D Graphics -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
 
@@ -36,6 +39,14 @@
         <button class="nav-item" data-view="charts" disabled>
             <span class="nav-icon">📊</span>
             <span>Visualizations</span>
+        </button>
+        <button class="nav-item" data-view="3d" disabled>
+            <span class="nav-icon">🎮</span>
+            <span>3D View</span>
+        </button>
+        <button class="nav-item" data-view="step" disabled>
+            <span class="nav-icon">🎬</span>
+            <span>Step Mode</span>
         </button>
         <button class="nav-item" data-view="details" disabled>
             <span class="nav-icon">🔬</span>
@@ -236,6 +247,74 @@
         </div>
     </section>
 
+    <!-- ====================== VIEW: 3D ====================== -->
+    <section class="view" id="view-3d">
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">🎮 Interactive 3D Visualization</h2>
+                    <p class="card-sub">Three.js / WebGL · Drag to rotate, scroll to zoom, right-click to pan</p>
+                </div>
+            </div>
+            
+            <!-- Toggle between Gantt 3D and Podium 3D -->
+            <div class="three-d-mode-toggle">
+                <button class="three-d-mode-btn active" data-mode="gantt" onclick="window.switch3DMode('gantt')">
+                    <span>📊</span> 3D Gantt Chart
+                </button>
+                <button class="three-d-mode-btn" data-mode="bars" onclick="window.switch3DMode('bars')">
+                    <span>🏆</span> 3D Podium · AI Tournament
+                </button>
+            </div>
+            
+            <!-- Algorithm selector (only shown for Gantt mode) -->
+            <div class="view-3d-algo-selector" id="threeDAlgoSelector"></div>
+            
+            <div class="view-3d-container">
+                <div class="view-3d-toolbar">
+                    <div class="view-3d-title">
+                        <span id="threeDTitle">🎯 3D Gantt Chart</span>
+                        <span class="view-3d-title-badge">WebGL</span>
+                    </div>
+                    <div class="view-3d-controls">
+                        <button class="step-btn" onclick="window.replay3D()">
+                            🔁 Replay
+                        </button>
+                        <button class="step-btn" onclick="window.showInstant3D()" id="showAllBtn">
+                            ⏭ Show All
+                        </button>
+                        <button class="step-btn" onclick="window.resetCamera3D()">
+                            📷 Reset View
+                        </button>
+                    </div>
+                </div>
+                <div class="view-3d-canvas" id="threeDCanvas"></div>
+                <div class="view-3d-help">
+                    <div class="view-3d-help-title">Mouse Controls</div>
+                    <kbd>Left Drag</kbd> Rotate &nbsp;
+                    <kbd>Wheel</kbd> Zoom &nbsp;
+                    <kbd>Right Drag</kbd> Pan
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====================== VIEW: STEP MODE ====================== -->
+    <section class="view" id="view-step">
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">🎬 Step-by-Step Simulation</h2>
+                    <p class="card-sub">Walk through every CPU tick · See the Ready Queue and CPU state in real-time</p>
+                </div>
+            </div>
+            
+            <div class="view-3d-algo-selector" id="stepAlgoSelector"></div>
+            
+            <div id="stepSimContainer"></div>
+        </div>
+    </section>
+
     <!-- ====================== VIEW: DETAILS ====================== -->
     <section class="view" id="view-details">
         <div class="card">
@@ -247,6 +326,9 @@
 </main>
 
 <script src="assets/js/gantt.js"></script>
+<script src="assets/js/gantt3d.js"></script>
+<script src="assets/js/bar3d.js"></script>
+<script src="assets/js/step_sim.js"></script>
 <script src="assets/js/charts.js"></script>
 <script src="assets/js/app.js"></script>
 </body>
