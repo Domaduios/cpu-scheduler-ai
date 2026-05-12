@@ -2,7 +2,6 @@
    CPU Scheduler AI · Professional Dark Theme
    Inspired by Data UI Mega Kit
    ========================================== */
-
 :root {
     /* Brand Colors */
     --green-50: #f0fdf4;
@@ -13,7 +12,6 @@
     --green-600: #16a34a;
     --green-700: #15803d;
     --green-glow: rgba(74, 222, 128, 0.25);
-    
     /* Dark Theme */
     --bg: #0a0e0c;
     --bg-elevated: #131814;
@@ -23,12 +21,10 @@
     --border: #2a3530;
     --border-light: #3a4540;
     --border-focus: #4ade80;
-    
     --text: #f1f5f3;
     --text-light: #a3b3ad;
     --text-muted: #6b7d75;
     --text-dim: #4a5650;
-    
     /* Accent Colors for Algorithms */
     --algo-fcfs: #4ade80;
     --algo-sjf: #60a5fa;
@@ -36,7 +32,6 @@
     --algo-rr: #fb923c;
     --algo-pri-np: #f472b6;
     --algo-pri-p: #facc15;
-    
     /* Process Colors */
     --p-color-1: #4ade80;
     --p-color-2: #60a5fa;
@@ -46,36 +41,30 @@
     --p-color-6: #facc15;
     --p-color-7: #2dd4bf;
     --p-color-8: #f87171;
-    
     /* Feedback */
     --success: #4ade80;
     --warning: #facc15;
     --error: #f87171;
     --info: #60a5fa;
-    
     /* Layout */
     --sidebar-w: 260px;
     --topbar-h: 80px;
     --radius: 16px;
     --radius-sm: 10px;
     --radius-lg: 20px;
-    
     --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
     --shadow: 0 4px 12px rgba(0,0,0,0.4);
     --shadow-glow: 0 0 30px var(--green-glow);
 }
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
 html, body {
     height: 100%;
     overflow: hidden;
 }
-
 body {
     font-family: 'Inter', -apple-system, sans-serif;
     background: var(--bg);
@@ -84,7 +73,6 @@ body {
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
 }
-
 /* Animated background */
 body::before {
     content: '';
@@ -99,9 +87,7 @@ body::before {
     pointer-events: none;
     z-index: 0;
 }
-
 button, input { font-family: inherit; }
-
 /* ==========================================
    SIDEBAR
    ========================================== */
@@ -118,7 +104,6 @@ button, input { font-family: inherit; }
     padding: 24px 16px;
     z-index: 50;
 }
-
 .sidebar-logo {
     display: flex;
     align-items: center;
@@ -126,7 +111,6 @@ button, input { font-family: inherit; }
     padding: 8px 12px;
     margin-bottom: 32px;
 }
-
 .logo-glow {
     width: 44px;
     height: 44px;
@@ -138,13 +122,11 @@ button, input { font-family: inherit; }
     font-size: 22px;
     box-shadow: 0 0 20px var(--green-glow);
 }
-
 .logo-title {
     font-weight: 800;
     font-size: 16px;
     letter-spacing: -0.3px;
 }
-
 .logo-sub {
     font-size: 11px;
     color: var(--green-400);
@@ -152,14 +134,12 @@ button, input { font-family: inherit; }
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-
 .sidebar-nav {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
-
 .nav-item {
     display: flex;
     align-items: center;
@@ -175,31 +155,25 @@ button, input { font-family: inherit; }
     transition: all 0.2s;
     text-align: left;
 }
-
 .nav-item:hover:not(:disabled) {
     background: var(--bg-card);
     color: var(--text);
 }
-
 .nav-item.active {
     background: linear-gradient(135deg, rgba(74, 222, 128, 0.15), rgba(74, 222, 128, 0.05));
     color: var(--green-400);
     border: 1px solid rgba(74, 222, 128, 0.2);
 }
-
 .nav-item:disabled {
     opacity: 0.4;
     cursor: not-allowed;
 }
-
 .nav-icon {
     font-size: 18px;
 }
-
 .sidebar-footer {
     padding: 16px 12px;
 }
-
 .footer-badge {
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -212,7 +186,6 @@ button, input { font-family: inherit; }
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-
 /* ==========================================
    MAIN CONTENT AREA
    ========================================== */
@@ -223,7 +196,6 @@ button, input { font-family: inherit; }
     position: relative;
     z-index: 1;
 }
-
 .topbar {
     position: sticky;
     top: 0;
@@ -237,19 +209,16 @@ button, input { font-family: inherit; }
     padding: 0 32px;
     z-index: 40;
 }
-
 .topbar-left h1 {
     font-size: 20px;
     font-weight: 700;
     letter-spacing: -0.4px;
     margin-bottom: 2px;
 }
-
 .topbar-left p {
     font-size: 13px;
     color: var(--text-muted);
 }
-
 .status-indicator {
     display: flex;
     align-items: center;
@@ -261,7 +230,6 @@ button, input { font-family: inherit; }
     font-size: 12px;
     font-weight: 600;
 }
-
 .status-dot {
     width: 8px;
     height: 8px;
@@ -270,12 +238,10 @@ button, input { font-family: inherit; }
     box-shadow: 0 0 8px var(--green-400);
     animation: pulse-dot 2s ease-in-out infinite;
 }
-
 @keyframes pulse-dot {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.5; }
 }
-
 /* ==========================================
    VIEWS
    ========================================== */
@@ -285,17 +251,14 @@ button, input { font-family: inherit; }
     max-width: 1600px;
     margin: 0 auto;
 }
-
 .view.active {
     display: block;
     animation: fadeIn 0.3s ease-out;
 }
-
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
-
 /* ==========================================
    CARDS
    ========================================== */
@@ -306,7 +269,6 @@ button, input { font-family: inherit; }
     padding: 24px;
     margin-bottom: 20px;
 }
-
 .card-header {
     display: flex;
     align-items: flex-start;
@@ -315,26 +277,22 @@ button, input { font-family: inherit; }
     gap: 16px;
     flex-wrap: wrap;
 }
-
 .card-title {
     font-size: 17px;
     font-weight: 700;
     color: var(--text);
     margin-bottom: 4px;
 }
-
 .card-sub {
     font-size: 13px;
     color: var(--text-muted);
 }
-
 .header-actions {
     display: flex;
     gap: 10px;
     align-items: center;
     flex-wrap: wrap;
 }
-
 /* ==========================================
    DATASET GRID
    ========================================== */
@@ -343,7 +301,6 @@ button, input { font-family: inherit; }
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 12px;
 }
-
 .dataset-card {
     background: var(--bg-card-2);
     border: 1px solid var(--border);
@@ -354,39 +311,32 @@ button, input { font-family: inherit; }
     text-align: left;
     color: var(--text);
 }
-
 .dataset-card:hover {
     background: var(--bg-card-hover);
     border-color: var(--green-400);
     transform: translateY(-2px);
     box-shadow: var(--shadow-glow);
 }
-
 .dataset-card.random {
     background: linear-gradient(135deg, rgba(74, 222, 128, 0.08), rgba(74, 222, 128, 0.02));
     border: 1px dashed rgba(74, 222, 128, 0.3);
 }
-
 .dataset-card.random:hover {
     background: linear-gradient(135deg, rgba(74, 222, 128, 0.15), rgba(74, 222, 128, 0.05));
 }
-
 .ds-icon {
     font-size: 24px;
     margin-bottom: 8px;
 }
-
 .ds-name {
     font-weight: 700;
     font-size: 14px;
     margin-bottom: 4px;
 }
-
 .ds-desc {
     font-size: 12px;
     color: var(--text-muted);
 }
-
 /* ==========================================
    SETTINGS PILLS
    ========================================== */
@@ -400,12 +350,10 @@ button, input { font-family: inherit; }
     gap: 10px;
     font-size: 13px;
 }
-
 .setting-pill label {
     font-weight: 600;
     color: var(--text-light);
 }
-
 .setting-pill input[type="number"] {
     width: 50px;
     background: var(--bg);
@@ -417,12 +365,10 @@ button, input { font-family: inherit; }
     text-align: center;
     font-family: 'JetBrains Mono', monospace;
 }
-
 .setting-pill input[type="number"]:focus {
     outline: none;
     border-color: var(--green-400);
 }
-
 /* Toggle Switch */
 .toggle {
     display: flex;
@@ -431,9 +377,7 @@ button, input { font-family: inherit; }
     cursor: pointer;
     user-select: none;
 }
-
 .toggle input { display: none; }
-
 .toggle-slider {
     width: 32px;
     height: 18px;
@@ -442,7 +386,6 @@ button, input { font-family: inherit; }
     position: relative;
     transition: background 0.2s;
 }
-
 .toggle-slider::before {
     content: '';
     position: absolute;
@@ -454,16 +397,13 @@ button, input { font-family: inherit; }
     left: 2px;
     transition: all 0.2s;
 }
-
 .toggle input:checked + .toggle-slider {
     background: var(--green-500);
 }
-
 .toggle input:checked + .toggle-slider::before {
     background: white;
     transform: translateX(14px);
 }
-
 /* ==========================================
    PROCESS TABLE
    ========================================== */
@@ -473,17 +413,14 @@ button, input { font-family: inherit; }
     border: 1px solid var(--border);
     background: var(--bg-card-2);
 }
-
 .process-table, .comparison-table, .metrics-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 13px;
 }
-
 .process-table thead, .comparison-table thead, .metrics-table thead {
     background: var(--bg-card-hover);
 }
-
 .process-table th, .comparison-table th, .metrics-table th {
     padding: 12px 16px;
     text-align: left;
@@ -494,19 +431,16 @@ button, input { font-family: inherit; }
     letter-spacing: 0.6px;
     border-bottom: 1px solid var(--border);
 }
-
 .process-table td, .comparison-table td, .metrics-table td {
     padding: 10px 16px;
     border-bottom: 1px solid var(--border);
     font-family: 'JetBrains Mono', monospace;
 }
-
 .process-table tbody tr:last-child td,
 .comparison-table tbody tr:last-child td,
 .metrics-table tbody tr:last-child td {
     border-bottom: none;
 }
-
 .process-table input {
     width: 100%;
     background: var(--bg);
@@ -518,15 +452,12 @@ button, input { font-family: inherit; }
     font-weight: 500;
     transition: all 0.2s;
 }
-
 .process-table input:focus {
     outline: none;
     border-color: var(--green-400);
     box-shadow: 0 0 0 3px var(--green-glow);
 }
-
 .process-table .pid-input { color: var(--green-400); font-weight: 700; }
-
 .btn-icon {
     background: transparent;
     border: 1px solid var(--border);
@@ -537,9 +468,7 @@ button, input { font-family: inherit; }
     font-size: 14px;
     transition: all 0.2s;
 }
-
 .btn-icon:hover { background: rgba(248, 113, 113, 0.1); border-color: var(--error); }
-
 /* ==========================================
    BUTTONS
    ========================================== */
@@ -550,7 +479,6 @@ button, input { font-family: inherit; }
     align-items: center;
     flex-wrap: wrap;
 }
-
 .btn {
     display: inline-flex;
     align-items: center;
@@ -564,37 +492,30 @@ button, input { font-family: inherit; }
     transition: all 0.2s;
     white-space: nowrap;
 }
-
 .btn:hover { transform: translateY(-1px); }
 .btn:active { transform: translateY(0); }
-
 .btn-ghost {
     background: var(--bg-card-2);
     color: var(--text);
     border: 1px solid var(--border);
 }
-
 .btn-ghost:hover {
     background: var(--bg-card-hover);
     border-color: var(--green-400);
 }
-
 .btn-primary {
     background: linear-gradient(135deg, var(--green-500), var(--green-600));
     color: #0a1f10;
     font-weight: 700;
     box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
 }
-
 .btn-primary:hover {
     box-shadow: 0 6px 20px rgba(34, 197, 94, 0.45);
 }
-
 .btn-lg {
     padding: 12px 24px;
     font-size: 14px;
 }
-
 /* ==========================================
    LOADING OVERLAY
    ========================================== */
@@ -608,25 +529,21 @@ button, input { font-family: inherit; }
     align-items: center;
     justify-content: center;
 }
-
 .loading-content {
     text-align: center;
 }
-
 .loading-content p {
     margin-top: 24px;
     color: var(--text-light);
     font-size: 14px;
     font-weight: 500;
 }
-
 .cpu-loader {
     position: relative;
     width: 80px;
     height: 80px;
     margin: 0 auto;
 }
-
 .cpu-core {
     position: absolute;
     top: 50%;
@@ -639,7 +556,6 @@ button, input { font-family: inherit; }
     box-shadow: 0 0 20px var(--green-400);
     animation: cpu-pulse 1.5s ease-in-out infinite;
 }
-
 .cpu-ring {
     position: absolute;
     inset: 0;
@@ -649,7 +565,6 @@ button, input { font-family: inherit; }
     border-radius: 50%;
     animation: cpu-spin 1.2s linear infinite;
 }
-
 .cpu-ring-2 {
     inset: 12px;
     border-color: transparent;
@@ -657,13 +572,11 @@ button, input { font-family: inherit; }
     border-left-color: var(--green-300);
     animation: cpu-spin 1.5s linear infinite reverse;
 }
-
 @keyframes cpu-spin { to { transform: rotate(360deg); } }
 @keyframes cpu-pulse {
     0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
     50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.7; }
 }
-
 /* ==========================================
    AI VIEW
    ========================================== */
@@ -676,7 +589,6 @@ button, input { font-family: inherit; }
     position: relative;
     overflow: hidden;
 }
-
 .ai-hero::before {
     content: '';
     position: absolute;
@@ -687,12 +599,10 @@ button, input { font-family: inherit; }
     background: radial-gradient(circle, rgba(74, 222, 128, 0.15), transparent 70%);
     pointer-events: none;
 }
-
 .ai-hero-content {
     position: relative;
     z-index: 1;
 }
-
 .ai-label {
     display: inline-flex;
     align-items: center;
@@ -707,7 +617,6 @@ button, input { font-family: inherit; }
     letter-spacing: 0.8px;
     margin-bottom: 16px;
 }
-
 .ai-winner-name {
     font-size: 32px;
     font-weight: 800;
@@ -715,19 +624,16 @@ button, input { font-family: inherit; }
     margin-bottom: 12px;
     letter-spacing: -0.5px;
 }
-
 .ai-summary {
     font-size: 15px;
     color: var(--text-light);
     line-height: 1.7;
     max-width: 800px;
 }
-
 .ai-summary strong {
     color: var(--green-400);
     font-weight: 700;
 }
-
 /* Workload Analysis Stats */
 .stats-grid {
     display: grid;
@@ -735,14 +641,12 @@ button, input { font-family: inherit; }
     gap: 12px;
     margin-top: 24px;
 }
-
 .stat-card {
     background: var(--bg-card-2);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     padding: 16px;
 }
-
 .stat-label {
     font-size: 11px;
     color: var(--text-muted);
@@ -751,14 +655,12 @@ button, input { font-family: inherit; }
     font-weight: 600;
     margin-bottom: 6px;
 }
-
 .stat-value {
     font-size: 22px;
     font-weight: 700;
     color: var(--text);
     font-family: 'JetBrains Mono', monospace;
 }
-
 .stat-value.small { font-size: 14px; }
 .stat-badge {
     display: inline-block;
@@ -769,7 +671,6 @@ button, input { font-family: inherit; }
     background: rgba(74, 222, 128, 0.15);
     color: var(--green-400);
 }
-
 /* AI Scores */
 .scores-section {
     background: var(--bg-card);
@@ -777,17 +678,14 @@ button, input { font-family: inherit; }
     border-radius: var(--radius);
     padding: 24px;
 }
-
 .scores-section h3 {
     font-size: 15px;
     font-weight: 700;
     margin-bottom: 16px;
 }
-
 .score-bar {
     margin-bottom: 14px;
 }
-
 .score-header {
     display: flex;
     justify-content: space-between;
@@ -795,29 +693,24 @@ button, input { font-family: inherit; }
     margin-bottom: 6px;
     font-size: 13px;
 }
-
 .score-name {
     color: var(--text);
     font-weight: 600;
 }
-
 .score-name.winner::before {
     content: '👑 ';
 }
-
 .score-value {
     color: var(--text-light);
     font-family: 'JetBrains Mono', monospace;
     font-weight: 700;
 }
-
 .score-track {
     height: 8px;
     background: var(--bg-card-2);
     border-radius: 4px;
     overflow: hidden;
 }
-
 .score-fill {
     height: 100%;
     background: linear-gradient(90deg, var(--green-600), var(--green-400));
@@ -825,12 +718,10 @@ button, input { font-family: inherit; }
     width: 0;
     transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
 .score-fill.winner {
     background: linear-gradient(90deg, var(--green-500), var(--green-300));
     box-shadow: 0 0 10px var(--green-glow);
 }
-
 /* ==========================================
    COMPARISON GRID (4 algorithms 2x2)
    ========================================== */
@@ -840,7 +731,6 @@ button, input { font-family: inherit; }
     gap: 16px;
     margin-bottom: 20px;
 }
-
 .algo-cell {
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -848,20 +738,17 @@ button, input { font-family: inherit; }
     padding: 18px;
     transition: all 0.2s;
 }
-
 .algo-cell.recommended {
     border-color: var(--green-400);
     background: linear-gradient(135deg, var(--bg-card), rgba(74, 222, 128, 0.04));
     box-shadow: 0 0 20px rgba(74, 222, 128, 0.1);
 }
-
 .algo-cell-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 14px;
 }
-
 .algo-name {
     font-size: 14px;
     font-weight: 700;
@@ -869,14 +756,12 @@ button, input { font-family: inherit; }
     align-items: center;
     gap: 8px;
 }
-
 .algo-name-dot {
     width: 10px;
     height: 10px;
     border-radius: 50%;
     box-shadow: 0 0 6px currentColor;
 }
-
 .algo-cell .recommended-badge {
     background: linear-gradient(135deg, var(--green-500), var(--green-600));
     color: #0a1f10;
@@ -887,21 +772,18 @@ button, input { font-family: inherit; }
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-
 .algo-mini-metrics {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 8px;
     margin-bottom: 12px;
 }
-
 .algo-mini-metric {
     background: var(--bg-card-2);
     border-radius: 8px;
     padding: 8px;
     text-align: center;
 }
-
 .mini-label {
     font-size: 9px;
     color: var(--text-muted);
@@ -909,14 +791,12 @@ button, input { font-family: inherit; }
     letter-spacing: 0.5px;
     margin-bottom: 2px;
 }
-
 .mini-value {
     font-size: 14px;
     font-weight: 700;
     color: var(--text);
     font-family: 'JetBrains Mono', monospace;
 }
-
 /* Mini Gantt */
 .mini-gantt-wrap {
     background: var(--bg);
@@ -924,7 +804,6 @@ button, input { font-family: inherit; }
     padding: 12px;
     overflow-x: auto;
 }
-
 /* ==========================================
    GANTT CHART
    ========================================== */
@@ -935,7 +814,6 @@ button, input { font-family: inherit; }
     overflow-x: auto;
     border: 1px solid var(--border);
 }
-
 .gantt-title {
     color: var(--text);
     font-size: 14px;
@@ -947,12 +825,10 @@ button, input { font-family: inherit; }
     flex-wrap: wrap;
     gap: 12px;
 }
-
 .gantt-controls {
     display: flex;
     gap: 6px;
 }
-
 .gantt-btn {
     background: var(--bg-card-2);
     color: var(--text-light);
@@ -964,23 +840,19 @@ button, input { font-family: inherit; }
     font-weight: 600;
     transition: all 0.2s;
 }
-
 .gantt-btn:hover {
     background: var(--bg-card-hover);
     color: var(--text);
 }
-
 .gantt-btn.active {
     background: var(--green-500);
     border-color: var(--green-400);
     color: #0a1f10;
 }
-
 .gantt-chart {
     position: relative;
     min-height: 80px;
 }
-
 .gantt-bar {
     height: 50px;
     display: inline-flex;
@@ -995,23 +867,18 @@ button, input { font-family: inherit; }
     box-sizing: border-box;
     transition: filter 0.2s;
 }
-
 .gantt-bar:hover { filter: brightness(1.15); }
-
 .gantt-bar.idle {
     background: repeating-linear-gradient(45deg, #1a201d, #1a201d 8px, #131814 8px, #131814 16px) !important;
     color: var(--text-muted);
 }
-
 .gantt-bar.animating {
     animation: barGrow 0.5s ease-out;
 }
-
 @keyframes barGrow {
     from { opacity: 0; transform: scaleX(0); transform-origin: left; }
     to { opacity: 1; transform: scaleX(1); }
 }
-
 .gantt-timeline {
     margin-top: 8px;
     color: var(--text-muted);
@@ -1020,12 +887,10 @@ button, input { font-family: inherit; }
     position: relative;
     height: 18px;
 }
-
 .gantt-tick {
     position: absolute;
     transform: translateX(-50%);
 }
-
 .gantt-tick::before {
     content: '';
     position: absolute;
@@ -1036,7 +901,6 @@ button, input { font-family: inherit; }
     height: 4px;
     background: var(--text-muted);
 }
-
 .gantt-pointer {
     position: absolute;
     top: 0;
@@ -1049,7 +913,6 @@ button, input { font-family: inherit; }
     border-radius: 1px;
     pointer-events: none;
 }
-
 .gantt-pointer::after {
     content: '▼';
     position: absolute;
@@ -1058,26 +921,22 @@ button, input { font-family: inherit; }
     color: var(--warning);
     font-size: 12px;
 }
-
 /* Mini Gantt - smaller version */
 .mini-gantt {
     height: 32px;
 }
 .mini-gantt .gantt-bar { height: 32px; font-size: 11px; }
-
 /* ==========================================
    COMPARISON TABLE
    ========================================== */
 .comparison-table .winner-row {
     background: rgba(74, 222, 128, 0.05);
 }
-
 .comparison-table .winner-row td:first-child {
     border-left: 3px solid var(--green-400);
     color: var(--green-400);
     font-weight: 700;
 }
-
 .metric-best {
     color: var(--green-400);
     font-weight: 700;
@@ -1086,7 +945,6 @@ button, input { font-family: inherit; }
     border-radius: 6px;
     display: inline-block;
 }
-
 /* ==========================================
    CHARTS GRID
    ========================================== */
@@ -1095,30 +953,24 @@ button, input { font-family: inherit; }
     grid-template-columns: 1fr 1fr;
     gap: 16px;
 }
-
 .chart-card {
     margin-bottom: 0;
 }
-
 .chart-card.chart-wide {
     grid-column: 1 / -1;
 }
-
 .chart-title {
     font-size: 14px;
     font-weight: 700;
     margin-bottom: 16px;
 }
-
 .chart-wrap {
     position: relative;
     height: 280px;
 }
-
 .chart-wrap-tall {
     height: 400px;
 }
-
 /* ==========================================
    DETAILS VIEW
    ========================================== */
@@ -1130,7 +982,6 @@ button, input { font-family: inherit; }
     overflow-x: auto;
     padding-bottom: 0;
 }
-
 .tab {
     padding: 10px 16px;
     background: transparent;
@@ -1144,23 +995,18 @@ button, input { font-family: inherit; }
     white-space: nowrap;
     margin-bottom: -1px;
 }
-
 .tab:hover { color: var(--text); }
-
 .tab.active {
     color: var(--green-400);
     border-bottom-color: var(--green-400);
 }
-
 .tab.recommended::after { content: ' ⭐'; }
-
 .metrics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 12px;
     margin-bottom: 20px;
 }
-
 .metric-card {
     background: var(--bg-card-2);
     border: 1px solid var(--border);
@@ -1168,7 +1014,6 @@ button, input { font-family: inherit; }
     padding: 14px;
     text-align: center;
 }
-
 .metric-card .metric-label {
     font-size: 11px;
     color: var(--text-muted);
@@ -1177,20 +1022,17 @@ button, input { font-family: inherit; }
     font-weight: 600;
     margin-bottom: 6px;
 }
-
 .metric-card .metric-value {
     font-size: 22px;
     font-weight: 800;
     color: var(--green-400);
     font-family: 'JetBrains Mono', monospace;
 }
-
 .metric-card .metric-unit {
     font-size: 11px;
     color: var(--text-muted);
     margin-top: 2px;
 }
-
 /* Reasoning */
 .reasoning-box {
     background: var(--bg-card-2);
@@ -1200,7 +1042,6 @@ button, input { font-family: inherit; }
     padding: 18px 20px;
     margin-top: 20px;
 }
-
 .reasoning-title {
     font-size: 13px;
     font-weight: 700;
@@ -1209,14 +1050,12 @@ button, input { font-family: inherit; }
     text-transform: uppercase;
     letter-spacing: 0.6px;
 }
-
 .reasoning-list {
     list-style: none;
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
-
 .reasoning-item {
     display: flex;
     gap: 10px;
@@ -1226,7 +1065,6 @@ button, input { font-family: inherit; }
     font-size: 13px;
     align-items: flex-start;
 }
-
 .reasoning-icon {
     flex-shrink: 0;
     width: 20px;
@@ -1238,7 +1076,6 @@ button, input { font-family: inherit; }
     font-size: 11px;
     font-weight: 700;
 }
-
 .reasoning-icon.success {
     background: rgba(74, 222, 128, 0.15);
     color: var(--success);
@@ -1255,7 +1092,6 @@ button, input { font-family: inherit; }
     background: rgba(96, 165, 250, 0.15);
     color: var(--info);
 }
-
 .recommended-banner {
     background: linear-gradient(135deg, rgba(74, 222, 128, 0.15), rgba(74, 222, 128, 0.05));
     border: 1px solid rgba(74, 222, 128, 0.3);
@@ -1269,7 +1105,6 @@ button, input { font-family: inherit; }
     align-items: center;
     gap: 10px;
 }
-
 /* ==========================================
    RESPONSIVE
    ========================================== */
@@ -1281,23 +1116,19 @@ button, input { font-family: inherit; }
         grid-column: 1;
     }
 }
-
 @media (max-width: 768px) {
     :root { --sidebar-w: 0px; }
     .sidebar { display: none; }
     .topbar, .view { padding-left: 16px; padding-right: 16px; }
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
-
 /* Hide priority col when disabled */
 .no-priority .priority-col { display: none; }
-
 /* Scrollbar styling */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg-elevated); }
 ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
-
 /* ==========================================
    3D VIEW STYLES
    ========================================== */
@@ -1310,7 +1141,6 @@ button, input { font-family: inherit; }
     margin-bottom: 20px;
     position: relative;
 }
-
 .view-3d-toolbar {
     display: flex;
     align-items: center;
@@ -1322,7 +1152,6 @@ button, input { font-family: inherit; }
     flex-wrap: wrap;
     gap: 10px;
 }
-
 .view-3d-title {
     font-size: 14px;
     font-weight: 700;
@@ -1331,7 +1160,6 @@ button, input { font-family: inherit; }
     align-items: center;
     gap: 10px;
 }
-
 .view-3d-title-badge {
     background: linear-gradient(135deg, #4ade80, #22c55e);
     color: #0a1f10;
@@ -1342,23 +1170,19 @@ button, input { font-family: inherit; }
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-
 .view-3d-controls {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
 }
-
 .view-3d-canvas {
     width: 100%;
     height: 500px;
     position: relative;
 }
-
 .view-3d-canvas canvas {
     display: block;
 }
-
 .view-3d-help {
     position: absolute;
     bottom: 12px;
@@ -1374,7 +1198,6 @@ button, input { font-family: inherit; }
     line-height: 1.7;
     z-index: 5;
 }
-
 .view-3d-help-title {
     font-size: 10px;
     font-weight: 700;
@@ -1383,7 +1206,6 @@ button, input { font-family: inherit; }
     letter-spacing: 0.6px;
     margin-bottom: 4px;
 }
-
 .view-3d-help kbd {
     display: inline-block;
     background: var(--bg-card-2);
@@ -1395,14 +1217,12 @@ button, input { font-family: inherit; }
     font-family: 'JetBrains Mono', monospace;
     margin-right: 4px;
 }
-
 .view-3d-algo-selector {
     display: flex;
     gap: 6px;
     margin-bottom: 16px;
     flex-wrap: wrap;
 }
-
 .algo-pill {
     background: var(--bg-card-2);
     border: 1px solid var(--border);
@@ -1414,18 +1234,15 @@ button, input { font-family: inherit; }
     cursor: pointer;
     transition: all 0.2s;
 }
-
 .algo-pill:hover {
     background: var(--bg-card-hover);
     color: var(--text);
 }
-
 .algo-pill.active {
     background: var(--green-500);
     color: #0a1f10;
     border-color: var(--green-400);
 }
-
 .algo-pill .pill-dot {
     display: inline-block;
     width: 8px;
@@ -1434,7 +1251,6 @@ button, input { font-family: inherit; }
     margin-right: 6px;
     vertical-align: middle;
 }
-
 /* ==========================================
    STEP-BY-STEP SIMULATOR
    ========================================== */
@@ -1444,7 +1260,6 @@ button, input { font-family: inherit; }
     border-radius: var(--radius);
     padding: 24px;
 }
-
 .step-sim-header {
     display: flex;
     justify-content: space-between;
@@ -1453,19 +1268,16 @@ button, input { font-family: inherit; }
     flex-wrap: wrap;
     gap: 16px;
 }
-
 .step-title {
     font-size: 16px;
     font-weight: 700;
     color: var(--text);
     margin-bottom: 2px;
 }
-
 .step-sub {
     font-size: 12px;
     color: var(--text-muted);
 }
-
 .step-time-display {
     display: flex;
     align-items: baseline;
@@ -1475,7 +1287,6 @@ button, input { font-family: inherit; }
     border-radius: var(--radius-sm);
     padding: 10px 18px;
 }
-
 .step-time-label {
     font-size: 10px;
     color: var(--text-muted);
@@ -1483,7 +1294,6 @@ button, input { font-family: inherit; }
     letter-spacing: 0.6px;
     font-weight: 700;
 }
-
 .step-time-value {
     font-size: 28px;
     font-weight: 800;
@@ -1492,13 +1302,11 @@ button, input { font-family: inherit; }
     min-width: 36px;
     text-align: center;
 }
-
 .step-time-total {
     font-size: 14px;
     color: var(--text-muted);
     font-family: 'JetBrains Mono', monospace;
 }
-
 /* CPU display */
 .cpu-display {
     background: linear-gradient(135deg, var(--bg-card-2), var(--bg-card));
@@ -1509,7 +1317,6 @@ button, input { font-family: inherit; }
     position: relative;
     overflow: hidden;
 }
-
 .cpu-label {
     display: flex;
     align-items: center;
@@ -1521,18 +1328,15 @@ button, input { font-family: inherit; }
     color: var(--text-muted);
     margin-bottom: 10px;
 }
-
 .cpu-icon {
     font-size: 16px;
 }
-
 .cpu-running {
     min-height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-
 .cpu-process {
     background: var(--bg-card);
     border: 2px solid;
@@ -1543,30 +1347,25 @@ button, input { font-family: inherit; }
     gap: 14px;
     animation: cpuPulse 1.2s ease-in-out infinite;
 }
-
 @keyframes cpuPulse {
     0%, 100% { box-shadow: 0 0 0 0 currentColor; opacity: 1; }
     50% { box-shadow: 0 0 20px 4px currentColor; opacity: 0.95; }
 }
-
 .cpu-pid {
     font-size: 26px;
     font-weight: 800;
     font-family: 'JetBrains Mono', monospace;
 }
-
 .cpu-info {
     font-size: 13px;
     color: var(--text-light);
     font-family: 'JetBrains Mono', monospace;
 }
-
 .cpu-empty {
     color: var(--text-muted);
     font-size: 13px;
     font-style: italic;
 }
-
 .cpu-idle {
     color: var(--warning);
     font-size: 18px;
@@ -1576,7 +1375,6 @@ button, input { font-family: inherit; }
     border-radius: var(--radius-sm);
     padding: 12px 24px;
 }
-
 .cpu-progress {
     height: 4px;
     background: var(--green-400);
@@ -1585,7 +1383,6 @@ button, input { font-family: inherit; }
     transition: width 0.3s, background 0.2s;
     box-shadow: 0 0 8px currentColor;
 }
-
 /* Lanes */
 .step-lanes {
     display: grid;
@@ -1593,7 +1390,6 @@ button, input { font-family: inherit; }
     gap: 16px;
     margin-bottom: 16px;
 }
-
 .lane {
     background: var(--bg-card-2);
     border: 1px solid var(--border);
@@ -1601,7 +1397,6 @@ button, input { font-family: inherit; }
     padding: 14px;
     min-height: 100px;
 }
-
 .lane-header {
     display: flex;
     align-items: center;
@@ -1610,9 +1405,7 @@ button, input { font-family: inherit; }
     padding-bottom: 10px;
     border-bottom: 1px solid var(--border);
 }
-
 .lane-icon { font-size: 16px; }
-
 .lane-name {
     font-size: 12px;
     text-transform: uppercase;
@@ -1621,7 +1414,6 @@ button, input { font-family: inherit; }
     color: var(--text);
     flex: 1;
 }
-
 .lane-count {
     background: var(--bg-card);
     color: var(--text);
@@ -1632,7 +1424,6 @@ button, input { font-family: inherit; }
     font-family: 'JetBrains Mono', monospace;
     border: 1px solid var(--border);
 }
-
 .lane-content {
     display: flex;
     flex-wrap: wrap;
@@ -1640,7 +1431,6 @@ button, input { font-family: inherit; }
     min-height: 50px;
     align-items: flex-start;
 }
-
 .lane-empty {
     color: var(--text-muted);
     font-size: 12px;
@@ -1649,7 +1439,6 @@ button, input { font-family: inherit; }
     width: 100%;
     text-align: center;
 }
-
 .proc-card {
     background: var(--bg-card);
     border: 1.5px solid;
@@ -1660,28 +1449,23 @@ button, input { font-family: inherit; }
     gap: 8px;
     animation: cardSlideIn 0.3s ease-out;
 }
-
 @keyframes cardSlideIn {
     from { opacity: 0; transform: translateY(-5px) scale(0.9); }
     to { opacity: 1; transform: translateY(0) scale(1); }
 }
-
 .proc-card.completed {
     opacity: 0.6;
 }
-
 .proc-card-pid {
     font-size: 14px;
     font-weight: 800;
     font-family: 'JetBrains Mono', monospace;
 }
-
 .proc-card-info {
     font-size: 11px;
     color: var(--text-light);
     font-family: 'JetBrains Mono', monospace;
 }
-
 /* Explanation box */
 .step-explanation {
     background: linear-gradient(135deg, rgba(96, 165, 250, 0.08), rgba(96, 165, 250, 0.02));
@@ -1696,16 +1480,13 @@ button, input { font-family: inherit; }
     line-height: 1.6;
     color: var(--text-light);
 }
-
 .step-exp-icon {
     font-size: 18px;
     flex-shrink: 0;
 }
-
 .step-exp-text strong {
     font-weight: 700;
 }
-
 /* Mini Gantt */
 .step-mini-gantt-wrap {
     background: var(--bg);
@@ -1715,7 +1496,6 @@ button, input { font-family: inherit; }
     margin-bottom: 16px;
     overflow-x: auto;
 }
-
 /* Controls */
 .step-controls {
     display: flex;
@@ -1724,7 +1504,6 @@ button, input { font-family: inherit; }
     flex-wrap: wrap;
     margin-bottom: 14px;
 }
-
 .step-btn {
     background: var(--bg-card-2);
     border: 1px solid var(--border);
@@ -1736,35 +1515,29 @@ button, input { font-family: inherit; }
     cursor: pointer;
     transition: all 0.2s;
 }
-
 .step-btn:hover:not(:disabled) {
     background: var(--bg-card-hover);
     border-color: var(--green-400);
 }
-
 .step-btn:disabled {
     opacity: 0.4;
     cursor: not-allowed;
 }
-
 .step-btn-primary {
     background: linear-gradient(135deg, var(--green-500), var(--green-600));
     color: #0a1f10;
     font-weight: 700;
     border-color: var(--green-400);
 }
-
 .step-btn-primary.playing {
     background: linear-gradient(135deg, var(--warning), #ea580c);
     border-color: var(--warning);
 }
-
 .step-speed {
     display: flex;
     align-items: center;
     gap: 8px;
 }
-
 .step-speed label {
     font-size: 11px;
     color: var(--text-muted);
@@ -1772,7 +1545,6 @@ button, input { font-family: inherit; }
     letter-spacing: 0.5px;
     font-weight: 700;
 }
-
 .step-speed select {
     background: var(--bg-card-2);
     border: 1px solid var(--border);
@@ -1783,12 +1555,10 @@ button, input { font-family: inherit; }
     font-weight: 600;
     cursor: pointer;
 }
-
 /* Slider */
 .step-slider-wrap {
     padding: 8px 4px;
 }
-
 .step-slider {
     width: 100%;
     height: 6px;
@@ -1799,7 +1569,6 @@ button, input { font-family: inherit; }
     outline: none;
     cursor: pointer;
 }
-
 .step-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
@@ -1811,11 +1580,9 @@ button, input { font-family: inherit; }
     box-shadow: 0 0 10px var(--green-400);
     transition: all 0.2s;
 }
-
 .step-slider::-webkit-slider-thumb:hover {
     transform: scale(1.2);
 }
-
 .step-slider::-moz-range-thumb {
     width: 18px;
     height: 18px;
@@ -1825,7 +1592,6 @@ button, input { font-family: inherit; }
     border: none;
     box-shadow: 0 0 10px var(--green-400);
 }
-
 /* Mobile responsive for step sim */
 @media (max-width: 768px) {
     .step-lanes {
@@ -1835,7 +1601,6 @@ button, input { font-family: inherit; }
         height: 400px;
     }
 }
-
 /* ==========================================
    3D MODE TOGGLE
    ========================================== */
@@ -1848,7 +1613,6 @@ button, input { font-family: inherit; }
     border-radius: var(--radius-sm);
     padding: 6px;
 }
-
 .three-d-mode-btn {
     flex: 1;
     background: transparent;
@@ -1866,27 +1630,22 @@ button, input { font-family: inherit; }
     gap: 8px;
     font-family: inherit;
 }
-
 .three-d-mode-btn:hover {
     color: var(--text);
     background: var(--bg-card);
 }
-
 .three-d-mode-btn.active {
     background: linear-gradient(135deg, var(--green-500), var(--green-600));
     color: #0a1f10;
     font-weight: 700;
     box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
 }
-
 .three-d-mode-btn span {
     font-size: 16px;
 }
-
 @media (max-width: 600px) {
     .three-d-mode-toggle { flex-direction: column; }
 }
-
 /* Audio toggle button */
 .step-btn.audio-on {
     background: linear-gradient(135deg, var(--green-500), var(--green-600));

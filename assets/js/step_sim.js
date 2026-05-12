@@ -3,7 +3,6 @@
  * Walks through scheduling decisions tick by tick
  * Shows: Ready Queue, CPU State, Waiting List, Completed
  */
-
 class StepSimulator {
     constructor(algoName, ganttData, processes) {
         this.algoName = algoName;
@@ -15,14 +14,12 @@ class StepSimulator {
         this.playing = false;
         this.playInterval = null;
     }
-    
     /**
      * Pre-compute every step (one per time unit)
      */
     buildSteps() {
         const steps = [];
         const procStates = {};
-        
         // Initialize process states
         this.processes.forEach(p => {
             procStates[p.pid] = {
@@ -32,7 +29,6 @@ class StepSimulator {
                 completedAt: null
             };
         });
-        
         // Walk through each time unit
         for (let t = 0; t <= this.totalTime; t++) {
             // Determine which segment is running at time t
@@ -43,18 +39,15 @@ class StepSimulator {
                     break;
                 }
             }
-            
             // Update process states based on time
             const states = {};
             const readyQueue = [];
             const waiting = []; // arrived but not yet executed in this run
             const completed = [];
             const running = runningSegment && runningSegment.pid !== 'IDLE' ? runningSegment.pid : null;
-            
             // Calculate execution at time t for each process
             const execMap = {};
             this.processes.forEach(p => execMap[p.pid] = 0);
-            
             for (const seg of this.gantt) {
                 if (seg.pid === 'IDLE') continue;
                 if (seg.end <= t) {
@@ -63,11 +56,9 @@ class StepSimulator {
                     execMap[seg.pid] += t - seg.start;
                 }
             }
-            
             this.processes.forEach(p => {
                 const executed = execMap[p.pid];
                 const remaining = p.burst - executed;
-                
                 let state = 'not_arrived';
                 if (p.arrival > t) {
                     state = 'not_arrived';
@@ -80,10 +71,8 @@ class StepSimulator {
                     state = 'ready';
                     readyQueue.push({ ...p, executed, remaining });
                 }
-                
                 states[p.pid] = { ...p, executed, remaining, state };
             });
-            
             // Build the explanation for this step
             let explanation = '';
             if (running) {
@@ -100,7 +89,6 @@ class StepSimulator {
             } else {
                 explanation = 'Initializing...';
             }
-            
             steps.push({
                 time: t,
                 running: running,
@@ -113,14 +101,11 @@ class StepSimulator {
                 explanation: explanation
             });
         }
-        
         return steps;
     }
-    
     getCurrentStep() {
         return this.steps[this.currentStep];
     }
-    
     next() {
         if (this.currentStep < this.steps.length - 1) {
             this.currentStep++;
@@ -128,7 +113,6 @@ class StepSimulator {
         }
         return false;
     }
-    
     prev() {
         if (this.currentStep > 0) {
             this.currentStep--;
@@ -136,17 +120,14 @@ class StepSimulator {
         }
         return false;
     }
-    
     goTo(time) {
         const idx = this.steps.findIndex(s => s.time === time);
         if (idx >= 0) this.currentStep = idx;
     }
-    
     reset() {
         this.stop();
         this.currentStep = 0;
     }
-    
     play(onStep, speed = 800) {
         this.stop();
         this.playing = true;
@@ -158,7 +139,6 @@ class StepSimulator {
             if (onStep) onStep(this.getCurrentStep());
         }, speed);
     }
-    
     stop() {
         this.playing = false;
         if (this.playInterval) {
@@ -167,7 +147,6 @@ class StepSimulator {
         }
     }
 }
-
 /**
  * Render the step simulation UI
  */
@@ -177,21 +156,17 @@ class StepSimulatorUI {
         this.algoName = algoName;
         this.results = results;
         this.simulator = new StepSimulator(algoName, results.gantt, results.processes);
-        
         this.processColors = {
             'P1': '#4ade80', 'P2': '#60a5fa', 'P3': '#a78bfa', 'P4': '#fb923c',
             'P5': '#f472b6', 'P6': '#facc15', 'P7': '#2dd4bf', 'P8': '#f87171',
             'P9': '#fb7185', 'P10': '#34d399'
         };
-        
         this.render();
         this.update();
     }
-    
     pidColor(pid) {
         return this.processColors[pid] || '#4ade80';
     }
-    
     render() {
         this.container.innerHTML = `
             <div class="step-sim">
@@ -206,7 +181,6 @@ class StepSimulatorUI {
                         <span class="step-time-total">/ ${this.simulator.totalTime}</span>
                     </div>
                 </div>
-                
                 <!-- CPU Display -->
                 <div class="cpu-display">
                     <div class="cpu-label">
@@ -218,7 +192,6 @@ class StepSimulatorUI {
                     </div>
                     <div class="cpu-progress" id="cpuProgress"></div>
                 </div>
-                
                 <!-- Lanes -->
                 <div class="step-lanes">
                     <div class="lane lane-ready">
@@ -229,7 +202,6 @@ class StepSimulatorUI {
                         </div>
                         <div class="lane-content" id="readyQueue"></div>
                     </div>
-                    
                     <div class="lane lane-completed">
                         <div class="lane-header">
                             <span class="lane-icon">✅</span>
@@ -239,15 +211,12 @@ class StepSimulatorUI {
                         <div class="lane-content" id="completedList"></div>
                     </div>
                 </div>
-                
                 <!-- Explanation -->
                 <div class="step-explanation" id="stepExplanation"></div>
-                
                 <!-- Timeline mini Gantt -->
                 <div class="step-mini-gantt-wrap">
                     <div class="step-mini-gantt" id="stepMiniGantt"></div>
                 </div>
-                
                 <!-- Controls -->
                 <div class="step-controls">
                     <button class="step-btn" id="btnFirst" onclick="window.stepSim.first()">
@@ -276,7 +245,6 @@ class StepSimulatorUI {
                         </select>
                     </div>
                 </div>
-                
                 <!-- Step slider -->
                 <div class="step-slider-wrap">
                     <input type="range" id="stepSlider" class="step-slider" 
@@ -285,20 +253,16 @@ class StepSimulatorUI {
                 </div>
             </div>
         `;
-        
         this.renderMiniGantt();
         window.stepSim = this; // Expose for inline handlers
     }
-    
     renderMiniGantt() {
         const wrap = document.getElementById('stepMiniGantt');
         const totalWidth = wrap.parentElement.clientWidth - 4;
         const unitWidth = totalWidth / this.simulator.totalTime;
-        
         wrap.style.width = `${this.simulator.totalTime * unitWidth}px`;
         wrap.style.height = '24px';
         wrap.style.position = 'relative';
-        
         this.results.gantt.forEach(seg => {
             const bar = document.createElement('div');
             bar.style.cssText = `
@@ -319,7 +283,6 @@ class StepSimulatorUI {
             bar.textContent = seg.pid === 'IDLE' ? '' : seg.pid;
             wrap.appendChild(bar);
         });
-        
         // Add the position indicator
         const indicator = document.createElement('div');
         indicator.id = 'stepIndicator';
@@ -335,22 +298,17 @@ class StepSimulatorUI {
             z-index: 10;
         `;
         wrap.appendChild(indicator);
-        
         this.unitWidth = unitWidth;
     }
-    
     update() {
         const step = this.simulator.getCurrentStep();
         if (!step) return;
-        
         // Time
         document.getElementById('stepTime').textContent = step.time;
         document.getElementById('stepSlider').value = step.time;
-        
         // CPU
         const cpuEl = document.getElementById('cpuRunning');
         const progressEl = document.getElementById('cpuProgress');
-        
         if (step.running) {
             const proc = step.runningProcess;
             const progressPct = (proc.executed / proc.burst) * 100;
@@ -370,7 +328,6 @@ class StepSimulatorUI {
             progressEl.style.width = `100%`;
             progressEl.style.background = 'var(--green-400)';
         }
-        
         // Ready Queue
         const readyEl = document.getElementById('readyQueue');
         readyEl.innerHTML = step.readyQueue.length === 0 
@@ -382,7 +339,6 @@ class StepSimulatorUI {
                 </div>
             `).join('');
         document.getElementById('readyCount').textContent = step.readyQueue.length;
-        
         // Completed
         const completedEl = document.getElementById('completedList');
         completedEl.innerHTML = step.completed.length === 0
@@ -394,51 +350,42 @@ class StepSimulatorUI {
                 </div>
             `).join('');
         document.getElementById('completedCount').textContent = step.completed.length;
-        
         // Explanation
         document.getElementById('stepExplanation').innerHTML = `
             <div class="step-exp-icon">💡</div>
             <div class="step-exp-text">${step.explanation}</div>
         `;
-        
         // Indicator on mini Gantt
         const indicator = document.getElementById('stepIndicator');
         if (indicator && this.unitWidth) {
             indicator.style.left = `${step.time * this.unitWidth}px`;
         }
-        
         // Disable buttons appropriately
         document.getElementById('btnFirst').disabled = step.time === 0;
         document.getElementById('btnPrev').disabled = step.time === 0;
         document.getElementById('btnNext').disabled = step.time === this.simulator.totalTime;
         document.getElementById('btnLast').disabled = step.time === this.simulator.totalTime;
     }
-    
     next() {
         if (this.simulator.next()) this.update();
     }
-    
     prev() {
         if (this.simulator.prev()) this.update();
     }
-    
     first() {
         this.simulator.reset();
         this.update();
         this.stopPlay();
     }
-    
     last() {
         this.simulator.currentStep = this.simulator.steps.length - 1;
         this.update();
         this.stopPlay();
     }
-    
     onSlider(value) {
         this.simulator.goTo(parseInt(value));
         this.update();
     }
-    
     togglePlay() {
         if (this.simulator.playing) {
             this.stopPlay();
@@ -446,7 +393,6 @@ class StepSimulatorUI {
             this.startPlay();
         }
     }
-    
     startPlay() {
         // If at end, restart
         if (this.simulator.currentStep >= this.simulator.steps.length - 1) {
@@ -458,7 +404,6 @@ class StepSimulatorUI {
         btn.innerHTML = '⏸ Pause';
         btn.classList.add('playing');
     }
-    
     stopPlay() {
         this.simulator.stop();
         const btn = document.getElementById('btnPlay');
@@ -467,7 +412,6 @@ class StepSimulatorUI {
             btn.classList.remove('playing');
         }
     }
-    
     changeSpeed() {
         if (this.simulator.playing) {
             this.stopPlay();

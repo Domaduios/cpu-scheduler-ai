@@ -2,7 +2,6 @@
  * Chart.js Visualizations
  * Creates 5 charts: Bar charts for metrics + Radar for multi-metric comparison
  */
-
 const CHART_COLORS = {
     'FCFS': '#4ade80',
     'SJF': '#60a5fa',
@@ -11,7 +10,6 @@ const CHART_COLORS = {
     'Priority_NP': '#f472b6',
     'Priority_P': '#facc15'
 };
-
 const CHART_LABELS = {
     'FCFS': 'FCFS',
     'SJF': 'SJF',
@@ -20,7 +18,6 @@ const CHART_LABELS = {
     'Priority_NP': 'Priority NP',
     'Priority_P': 'Priority P'
 };
-
 // Chart.js global defaults for dark theme
 function setupChartDefaults() {
     Chart.defaults.color = '#a3b3ad';
@@ -28,27 +25,22 @@ function setupChartDefaults() {
     Chart.defaults.font.size = 11;
     Chart.defaults.borderColor = '#2a3530';
 }
-
 // Stored chart instances for cleanup
 const chartInstances = {};
-
 function destroyChart(id) {
     if (chartInstances[id]) {
         chartInstances[id].destroy();
         delete chartInstances[id];
     }
 }
-
 function makeBarChart(canvasId, results, metricKey, label, unit = '') {
     destroyChart(canvasId);
     const canvas = document.getElementById(canvasId);
     if (!canvas) return;
-    
     const algos = Object.keys(results);
     const data = algos.map(a => results[a].metrics[metricKey]);
     const labels = algos.map(a => CHART_LABELS[a]);
     const colors = algos.map(a => CHART_COLORS[a]);
-    
     chartInstances[canvasId] = new Chart(canvas, {
         type: 'bar',
         data: {
@@ -94,34 +86,28 @@ function makeBarChart(canvasId, results, metricKey, label, unit = '') {
         }
     });
 }
-
 function makeRadarChart(canvasId, results) {
     destroyChart(canvasId);
     const canvas = document.getElementById(canvasId);
     if (!canvas) return;
-    
     const algos = Object.keys(results);
-    
     // Normalize metrics to 0-100 (higher = better)
     const allWaiting = algos.map(a => results[a].metrics.avg_waiting);
     const allTurnaround = algos.map(a => results[a].metrics.avg_turnaround);
     const allResponse = algos.map(a => results[a].metrics.avg_response);
     const allThroughput = algos.map(a => results[a].metrics.throughput);
     const allFairness = algos.map(a => results[a].metrics.fairness);
-    
     const minW = Math.min(...allWaiting), maxW = Math.max(...allWaiting);
     const minT = Math.min(...allTurnaround), maxT = Math.max(...allTurnaround);
     const minR = Math.min(...allResponse), maxR = Math.max(...allResponse);
     const maxThr = Math.max(...allThroughput);
     const maxF = Math.max(...allFairness);
-    
     // Convert: lower is better → invert
     const normalize = (val, min, max, invert = true) => {
         if (max === min) return 100;
         const norm = ((val - min) / (max - min)) * 100;
         return invert ? 100 - norm : norm;
     };
-    
     const datasets = algos.map(algo => {
         const m = results[algo].metrics;
         return {
@@ -143,7 +129,6 @@ function makeRadarChart(canvasId, results) {
             pointRadius: 4
         };
     });
-    
     chartInstances[canvasId] = new Chart(canvas, {
         type: 'radar',
         data: {
@@ -191,7 +176,6 @@ function makeRadarChart(canvasId, results) {
         }
     });
 }
-
 function renderAllCharts(results) {
     setupChartDefaults();
     makeBarChart('chartWaiting', results, 'avg_waiting', 'Avg Waiting Time', 'u');

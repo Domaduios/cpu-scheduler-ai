@@ -1,10 +1,8 @@
 /**
  * CPU Scheduler AI - Main Application
  */
-
 let processIdCounter = 1;
 let lastResults = null;
-
 const ALGO_NAMES = {
     'FCFS': 'First Come First Serve',
     'SJF': 'Shortest Job First',
@@ -13,17 +11,14 @@ const ALGO_NAMES = {
     'Priority_NP': 'Priority (Non-preemptive)',
     'Priority_P': 'Priority (Preemptive)'
 };
-
 const ALGO_SHORT = {
     'FCFS': 'FCFS', 'SJF': 'SJF', 'SRTF': 'SRTF',
     'RR': 'Round Robin', 'Priority_NP': 'Priority NP', 'Priority_P': 'Priority P'
 };
-
 const ALGO_COLORS = {
     'FCFS': '#4ade80', 'SJF': '#60a5fa', 'SRTF': '#a78bfa',
     'RR': '#fb923c', 'Priority_NP': '#f472b6', 'Priority_P': '#facc15'
 };
-
 const VIEW_TITLES = {
     'input': { title: 'Process Input', sub: 'Configure processes and launch the simulation' },
     'ai': { title: 'AI Recommendation', sub: 'Decision engine analysis with multi-criteria scoring' },
@@ -33,7 +28,6 @@ const VIEW_TITLES = {
     'step': { title: 'Step-by-Step Mode', sub: 'Walk through every CPU tick · See queues in real-time' },
     'details': { title: 'Algorithm Details', sub: 'Deep dive into each algorithm with full Gantt chart' }
 };
-
 // =================== INIT ===================
 document.addEventListener('DOMContentLoaded', () => {
     setupNavigation();
@@ -42,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
     addProcess();
     togglePriority();
 });
-
 function setupNavigation() {
     document.querySelectorAll('.nav-item').forEach(item => {
         item.addEventListener('click', () => {
@@ -52,51 +45,41 @@ function setupNavigation() {
         });
     });
 }
-
 function switchView(viewName) {
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     document.querySelector(`.nav-item[data-view="${viewName}"]`)?.classList.add('active');
-    
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.getElementById(`view-${viewName}`)?.classList.add('active');
-    
     const info = VIEW_TITLES[viewName];
     if (info) {
         document.getElementById('viewTitle').textContent = info.title;
         document.getElementById('viewSubtitle').textContent = info.sub;
     }
-    
     // Render charts when entering charts view (Chart.js needs visible canvas)
     if (viewName === 'charts' && lastResults) {
         setTimeout(() => renderAllCharts(lastResults.results), 50);
     }
-    
     // Initialize 3D view
     if (viewName === '3d' && lastResults) {
         setTimeout(() => init3DView(), 50);
     }
-    
     // Initialize Step view
     if (viewName === 'step' && lastResults) {
         setTimeout(() => initStepView(), 50);
     }
 }
-
 function enableNavigation() {
     document.querySelectorAll('.nav-item').forEach(item => {
         item.disabled = false;
     });
 }
-
 // =================== PROCESS MANAGEMENT ===================
 function addProcess(arrival = 0, burst = null, priority = null) {
     const tbody = document.getElementById('processTableBody');
     const row = document.createElement('tr');
     const pid = `P${processIdCounter}`;
-    
     const burstVal = burst !== null ? burst : Math.floor(Math.random() * 8) + 2;
     const priorityVal = priority !== null ? priority : Math.floor(Math.random() * 5) + 1;
-    
     row.innerHTML = `
         <td><input type="text" class="pid-input" value="${pid}" maxlength="4"></td>
         <td><input type="number" class="arrival-input" value="${arrival}" min="0" max="100"></td>
@@ -104,29 +87,23 @@ function addProcess(arrival = 0, burst = null, priority = null) {
         <td class="priority-col"><input type="number" class="priority-input" value="${priorityVal}" min="1" max="20"></td>
         <td><button class="btn-icon" onclick="this.closest('tr').remove()">🗑️</button></td>
     `;
-    
     tbody.appendChild(row);
     processIdCounter++;
 }
-
 function clearAll() {
     document.getElementById('processTableBody').innerHTML = '';
     processIdCounter = 1;
     lastResults = null;
-    
     // Disable nav items except input
     document.querySelectorAll('.nav-item').forEach(item => {
         if (item.dataset.view !== 'input') item.disabled = true;
     });
-    
     addProcess();
 }
-
 function togglePriority() {
     const enabled = document.getElementById('usePriority').checked;
     document.getElementById('processTable').classList.toggle('no-priority', !enabled);
 }
-
 // =================== DATASET LOADING ===================
 async function loadDataset(name) {
     if (name === 'random') {
@@ -134,14 +111,12 @@ async function loadDataset(name) {
         loadRandomDataset();
         return;
     }
-    
     try {
         const response = await fetch('api/schedule.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ action: 'get_dataset', name })
         });
-        
         const data = await response.json();
         if (data.success && data.dataset) {
             applyDataset(data.dataset);
@@ -151,85 +126,65 @@ async function loadDataset(name) {
         alert('Failed to load dataset: ' + err.message);
     }
 }
-
 function loadRandomDataset() {
     const count = Math.floor(Math.random() * 4) + 4; // 4-7
     document.getElementById('processTableBody').innerHTML = '';
     processIdCounter = 1;
-    
     let arrival = 0;
     for (let i = 0; i < count; i++) {
         addProcess(arrival, Math.floor(Math.random() * 11) + 2, Math.floor(Math.random() * 5) + 1);
         arrival += Math.floor(Math.random() * 4);
     }
 }
-
 function applyDataset(dataset) {
     document.getElementById('processTableBody').innerHTML = '';
     processIdCounter = 1;
-    
     dataset.processes.forEach(p => {
         addProcess(p.arrival, p.burst, p.priority);
     });
 }
-
 // =================== SIMULATION ===================
 async function runSimulation() {
     const processes = collectProcesses();
-    
     if (processes.length === 0) {
         alert('⚠️ Please add at least one process');
         return;
     }
-    
     const quantum = parseInt(document.getElementById('quantum').value) || 2;
-    
     document.getElementById('loadingOverlay').style.display = 'flex';
-    
     try {
         const response = await fetch('api/schedule.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ processes, quantum })
         });
-        
         const data = await response.json();
         if (!data.success) throw new Error(data.error || 'Unknown error');
-        
         lastResults = data;
-        
         // Wait briefly for visual effect
         await new Promise(r => setTimeout(r, 600));
-        
         document.getElementById('loadingOverlay').style.display = 'none';
-        
         enableNavigation();
         renderAIView(data.ai, data.results);
         renderComparisonView(data.results, data.ai.recommended);
         renderDetailsView(data.results, data.ai);
-        
         // Switch to AI view first to show the recommendation
         switchView('ai');
-        
     } catch (err) {
         document.getElementById('loadingOverlay').style.display = 'none';
         alert('❌ Error: ' + err.message);
         console.error(err);
     }
 }
-
 function collectProcesses() {
     const processes = [];
     const rows = document.querySelectorAll('#processTableBody tr');
     const usePriority = document.getElementById('usePriority').checked;
-    
     rows.forEach(row => {
         const pid = row.querySelector('.pid-input').value.trim();
         const arrival = parseInt(row.querySelector('.arrival-input').value);
         const burst = parseInt(row.querySelector('.burst-input').value);
-        
         if (!pid || isNaN(arrival) || isNaN(burst) || burst < 1) return;
-        
         const proc = { pid, arrival, burst };
         if (usePriority) {
             const priority = parseInt(row.querySelector('.priority-input').value);
@@ -237,16 +192,13 @@ function collectProcesses() {
         }
         processes.push(proc);
     });
-    
     return processes;
 }
-
 // =================== AI VIEW ===================
 function renderAIView(ai, results) {
     const container = document.getElementById('aiContent');
     const winner = ai.recommended;
     const a = ai.workload_analysis;
-    
     // Build scores HTML
     const sortedScores = Object.entries(ai.scores).sort((x, y) => y[1] - x[1]);
     let scoresHtml = '';
@@ -264,7 +216,6 @@ function renderAIView(ai, results) {
             </div>
         `;
     });
-    
     container.innerHTML = `
         <div class="ai-hero">
             <div class="ai-hero-content">
@@ -273,7 +224,6 @@ function renderAIView(ai, results) {
                 </div>
                 <div class="ai-winner-name">${ALGO_NAMES[winner]}</div>
                 <p class="ai-summary">${ai.recommendation_summary.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p>
-                
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-label">Workload Type</div>
@@ -302,13 +252,11 @@ function renderAIView(ai, results) {
                 </div>
             </div>
         </div>
-        
         <div class="scores-section">
             <h3>📊 Multi-criteria Scoring · Performance + Rules-based + Fairness</h3>
             ${scoresHtml}
         </div>
     `;
-    
     // Animate score bars
     setTimeout(() => {
         container.querySelectorAll('.score-fill').forEach(fill => {
@@ -316,21 +264,17 @@ function renderAIView(ai, results) {
         });
     }, 200);
 }
-
 // =================== COMPARISON VIEW (4 ALGOS GRID) ===================
 function renderComparisonView(results, recommended) {
     // Show only the 4 main algorithms (always present)
     const mainAlgos = ['FCFS', 'SJF', 'SRTF', 'RR'];
     const grid = document.getElementById('comparisonGrid');
-    
     grid.innerHTML = '';
-    
     mainAlgos.forEach(algo => {
         if (!results[algo]) return;
         const result = results[algo];
         const m = result.metrics;
         const isRec = algo === recommended;
-        
         const cell = document.createElement('div');
         cell.className = `algo-cell ${isRec ? 'recommended' : ''}`;
         cell.innerHTML = `
@@ -341,7 +285,6 @@ function renderComparisonView(results, recommended) {
                 </div>
                 ${isRec ? '<span class="recommended-badge">⭐ AI Pick</span>' : ''}
             </div>
-            
             <div class="algo-mini-metrics">
                 <div class="algo-mini-metric">
                     <div class="mini-label">Wait</div>
@@ -360,12 +303,10 @@ function renderComparisonView(results, recommended) {
                     <div class="mini-value">${m.fairness}%</div>
                 </div>
             </div>
-            
             <div class="mini-gantt-wrap" id="miniGantt-${algo}"></div>
         `;
         grid.appendChild(cell);
     });
-    
     // Render mini gantts
     setTimeout(() => {
         mainAlgos.forEach(algo => {
@@ -378,21 +319,17 @@ function renderComparisonView(results, recommended) {
             });
         });
     }, 100);
-    
     // Render comparison table
     renderComparisonTable(results, recommended);
 }
-
 function renderComparisonTable(results, recommended) {
     const table = document.getElementById('comparisonTable');
     const algos = Object.keys(results);
-    
     const minW = Math.min(...algos.map(a => results[a].metrics.avg_waiting));
     const minT = Math.min(...algos.map(a => results[a].metrics.avg_turnaround));
     const minR = Math.min(...algos.map(a => results[a].metrics.avg_response));
     const maxThr = Math.max(...algos.map(a => results[a].metrics.throughput));
     const maxF = Math.max(...algos.map(a => results[a].metrics.fairness));
-    
     let html = `
         <thead>
             <tr>
@@ -407,12 +344,10 @@ function renderComparisonTable(results, recommended) {
         </thead>
         <tbody>
     `;
-    
     algos.forEach(algo => {
         const m = results[algo].metrics;
         const isWin = algo === recommended;
         const cell = (val, isBest) => isBest ? `<span class="metric-best">${val}</span>` : val;
-        
         html += `
             <tr class="${isWin ? 'winner-row' : ''}">
                 <td><strong>${ALGO_NAMES[algo]}</strong>${isWin ? ' 👑' : ''}</td>
@@ -425,11 +360,9 @@ function renderComparisonTable(results, recommended) {
             </tr>
         `;
     });
-    
     html += '</tbody>';
     table.innerHTML = html;
 }
-
 function playAllAnimations() {
     const mainAlgos = ['FCFS', 'SJF', 'SRTF', 'RR'];
     mainAlgos.forEach(algo => {
@@ -437,7 +370,6 @@ function playAllAnimations() {
         if (chart) chart.playAnimation();
     });
 }
-
 function resetAllAnimations() {
     const mainAlgos = ['FCFS', 'SJF', 'SRTF', 'RR'];
     mainAlgos.forEach(algo => {
@@ -445,12 +377,10 @@ function resetAllAnimations() {
         if (chart) chart.showInstant();
     });
 }
-
 // =================== DETAILS VIEW ===================
 function renderDetailsView(results, ai) {
     const tabsContainer = document.getElementById('detailsTabs');
     const recommended = ai.recommended;
-    
     let tabsHtml = '';
     Object.keys(results).forEach((algo, idx) => {
         const isRec = algo === recommended;
@@ -462,27 +392,22 @@ function renderDetailsView(results, ai) {
         `;
     });
     tabsContainer.innerHTML = tabsHtml;
-    
     // Render first algorithm
     const firstAlgo = Object.keys(results)[0];
     showDetailsTabContent(firstAlgo);
 }
-
 function showDetailsTab(algo, btn) {
     document.querySelectorAll('#detailsTabs .tab').forEach(t => t.classList.remove('active'));
     btn.classList.add('active');
     showDetailsTabContent(algo);
 }
-
 function showDetailsTabContent(algo) {
     const result = lastResults.results[algo];
     const m = result.metrics;
     const isRec = algo === lastResults.ai.recommended;
     const reasoning = lastResults.ai.reasoning[algo];
     const container = document.getElementById('detailsContent');
-    
     const hasPriority = result.processes[0].priority !== null && result.processes[0].priority !== undefined;
-    
     let processRows = '';
     result.processes.forEach(p => {
         processRows += `
@@ -498,7 +423,6 @@ function showDetailsTabContent(algo) {
             </tr>
         `;
     });
-    
     let reasoningItems = '';
     reasoning.forEach(point => {
         const iconChar = point.type === 'success' ? '✓' : point.type === 'warning' ? '⚠' : point.type === 'error' ? '✗' : 'ℹ';
@@ -509,14 +433,12 @@ function showDetailsTabContent(algo) {
             </li>
         `;
     });
-    
     container.innerHTML = `
         ${isRec ? `
             <div class="recommended-banner">
                 <span>⭐</span> This is the AI's top recommendation for your workload
             </div>
         ` : ''}
-        
         <div class="metrics-grid">
             <div class="metric-card">
                 <div class="metric-label">Waiting Time</div>
@@ -549,9 +471,7 @@ function showDetailsTabContent(algo) {
                 <div class="metric-unit">efficiency</div>
             </div>
         </div>
-        
         <div class="gantt-container" id="fullGantt-${algo}"></div>
-        
         <div class="table-wrapper" style="margin-top: 20px;">
             <table class="metrics-table">
                 <thead>
@@ -569,13 +489,11 @@ function showDetailsTabContent(algo) {
                 <tbody>${processRows}</tbody>
             </table>
         </div>
-        
         <div class="reasoning-box">
             <h4 class="reasoning-title">🧠 AI Analysis · ${ALGO_NAMES[algo]}</h4>
             <ul class="reasoning-list">${reasoningItems}</ul>
         </div>
     `;
-    
     // Render full Gantt
     setTimeout(() => {
         const ganttEl = document.getElementById(`fullGantt-${algo}`);
@@ -586,40 +504,32 @@ function showDetailsTabContent(algo) {
         });
     }, 50);
 }
-
 // =================== 3D VIEW ===================
 let current3DAlgo = null;
 let current3DInstance = null;
 let current3DMode = 'gantt'; // 'gantt' or 'bars'
-
 function init3DView() {
     if (!lastResults) return;
-    
     // Reset to default mode (Gantt)
     current3DMode = 'gantt';
     updateModeButtons();
-    
     // Build algorithm selector for Gantt mode
     buildAlgoSelector('threeDAlgoSelector', (algo) => {
         load3DGantt(algo);
     });
-    
     // Load the AI-recommended algorithm by default
     const defaultAlgo = lastResults.ai.recommended;
     load3DGantt(defaultAlgo);
 }
-
 function updateModeButtons() {
     document.querySelectorAll('.three-d-mode-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.mode === current3DMode);
     });
-    
     // Show/hide algorithm selector based on mode
     const selector = document.getElementById('threeDAlgoSelector');
     if (selector) {
         selector.style.display = current3DMode === 'gantt' ? 'flex' : 'none';
     }
-    
     // Update title
     const title = document.getElementById('threeDTitle');
     if (title) {
@@ -627,19 +537,16 @@ function updateModeButtons() {
             ? '🎯 3D Gantt Chart' 
             : '🏆 AI Tournament · Algorithm Rankings';
     }
-    
     // Show/hide "Show All" button (only relevant for Gantt)
     const showAllBtn = document.getElementById('showAllBtn');
     if (showAllBtn) {
         showAllBtn.style.display = current3DMode === 'gantt' ? '' : 'none';
     }
 }
-
 window.switch3DMode = function(mode) {
     if (mode === current3DMode) return;
     current3DMode = mode;
     updateModeButtons();
-    
     // Dispose current instance
     if (current3DInstance) {
         current3DInstance.dispose();
@@ -649,7 +556,6 @@ window.switch3DMode = function(mode) {
         window.barChart3DInstance.dispose();
         window.barChart3DInstance = null;
     }
-    
     if (mode === 'gantt') {
         const algo = current3DAlgo || lastResults.ai.recommended;
         load3DGantt(algo);
@@ -657,14 +563,11 @@ window.switch3DMode = function(mode) {
         loadBarChart3D();
     }
 };
-
 function buildAlgoSelector(containerId, onSelect) {
     const container = document.getElementById(containerId);
     if (!container) return;
-    
     const algos = Object.keys(lastResults.results);
     container.innerHTML = '';
-    
     algos.forEach(algo => {
         const pill = document.createElement('button');
         pill.className = 'algo-pill';
@@ -680,12 +583,10 @@ function buildAlgoSelector(containerId, onSelect) {
         };
         container.appendChild(pill);
     });
-    
     const recommended = lastResults.ai.recommended;
     const recPill = container.querySelector(`[data-algo="${recommended}"]`);
     if (recPill) recPill.classList.add('active');
 }
-
 function load3DGantt(algo) {
     if (current3DInstance) {
         current3DInstance.dispose();
@@ -695,18 +596,14 @@ function load3DGantt(algo) {
         window.barChart3DInstance.dispose();
         window.barChart3DInstance = null;
     }
-    
     const result = lastResults.results[algo];
     if (!result) return;
-    
     current3DAlgo = algo;
     const canvas = document.getElementById('threeDCanvas');
     canvas.innerHTML = '';
-    
     current3DInstance = new Gantt3D(canvas, result.gantt, ALGO_NAMES[algo]);
     window.gantt3DInstances[algo] = current3DInstance;
 }
-
 function loadBarChart3D() {
     if (window.barChart3DInstance) {
         window.barChart3DInstance.dispose();
@@ -716,10 +613,8 @@ function loadBarChart3D() {
         current3DInstance.dispose();
         current3DInstance = null;
     }
-    
     const canvas = document.getElementById('threeDCanvas');
     canvas.innerHTML = '';
-    
     window.barChart3DInstance = new Podium3D(
         canvas,
         lastResults.results,
@@ -727,7 +622,6 @@ function loadBarChart3D() {
         lastResults.ai.scores
     );
 }
-
 window.replay3D = function() {
     if (current3DMode === 'gantt' && current3DInstance) {
         current3DInstance.replayAnimation();
@@ -735,11 +629,9 @@ window.replay3D = function() {
         window.barChart3DInstance.replayAnimation();
     }
 };
-
 window.showInstant3D = function() {
     if (current3DInstance) current3DInstance.showInstant();
 };
-
 window.resetCamera3D = function() {
     if (current3DMode === 'gantt' && current3DInstance) {
         current3DInstance.resetCamera();
@@ -747,36 +639,27 @@ window.resetCamera3D = function() {
         window.barChart3DInstance.resetCamera();
     }
 };
-
 // =================== STEP MODE ===================
 let currentStepInstance = null;
-
 function initStepView() {
     if (!lastResults) return;
-    
     buildAlgoSelector('stepAlgoSelector', (algo) => {
         loadStepSim(algo);
     });
-    
     const defaultAlgo = lastResults.ai.recommended;
     loadStepSim(defaultAlgo);
 }
-
 function loadStepSim(algo) {
     // Stop previous if any
     if (currentStepInstance) {
         currentStepInstance.stopPlay();
     }
-    
     const result = lastResults.results[algo];
     if (!result) return;
-    
     const container = document.getElementById('stepSimContainer');
     container.innerHTML = '';
-    
     currentStepInstance = new StepSimulatorUI(container, ALGO_NAMES[algo], result);
 }
-
 // Helper for color access from gantt.js
 function getProcessColor(pid) {
     const colors = {
@@ -786,19 +669,14 @@ function getProcessColor(pid) {
     };
     return colors[pid] || '#4ade80';
 }
-
 // =================== AUDIO TOGGLE ===================
 let audioEnabled = false;
-
 window.toggleAudio = async function() {
     if (!window.audioEngine) return;
-    
     audioEnabled = !audioEnabled;
-    
     // Resume audio context (browsers require user gesture)
     await window.audioEngine.ensureRunning();
     window.audioEngine.setEnabled(audioEnabled);
-    
     // Update button visual
     const btn = document.getElementById('audioToggleBtn');
     if (btn) {

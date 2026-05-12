@@ -7,13 +7,10 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <!-- Three.js for 3D Graphics -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
-
-<!-- Sidebar Navigation -->
 <aside class="sidebar">
     <div class="sidebar-logo">
         <div class="logo-glow">⚙️</div>
@@ -22,7 +19,6 @@
             <div class="logo-sub">AI-Powered</div>
         </div>
     </div>
-    
     <nav class="sidebar-nav">
         <button class="nav-item active" data-view="input">
             <span class="nav-icon">📥</span>
@@ -53,16 +49,11 @@
             <span>Algorithm Details</span>
         </button>
     </nav>
-    
     <div class="sidebar-footer">
         <div class="footer-badge">OS + Graphics + AI</div>
     </div>
 </aside>
-
-<!-- Main Content -->
 <main class="main">
-    
-    <!-- Top Bar -->
     <header class="topbar">
         <div class="topbar-left">
             <h1 id="viewTitle">Process Input</h1>
@@ -75,11 +66,7 @@
             </div>
         </div>
     </header>
-
-    <!-- ====================== VIEW: INPUT ====================== -->
     <section class="view active" id="view-input">
-        
-        <!-- Datasets Section -->
         <div class="card">
             <div class="card-header">
                 <div>
@@ -87,7 +74,6 @@
                     <p class="card-sub">Pick a predefined scenario or generate random data</p>
                 </div>
             </div>
-            
             <div class="dataset-grid">
                 <button class="dataset-card" onclick="loadDataset('classic')">
                     <div class="ds-icon">📚</div>
@@ -116,8 +102,6 @@
                 </button>
             </div>
         </div>
-        
-        <!-- Settings & Process Table -->
         <div class="card">
             <div class="card-header">
                 <div>
@@ -138,7 +122,6 @@
                     </div>
                 </div>
             </div>
-            
             <div class="table-wrapper">
                 <table class="process-table" id="processTable">
                     <thead>
@@ -153,7 +136,6 @@
                     <tbody id="processTableBody"></tbody>
                 </table>
             </div>
-            
             <div class="actions-row">
                 <button class="btn btn-ghost" onclick="addProcess()">
                     <span>➕</span> Add Process
@@ -167,10 +149,7 @@
                 </button>
             </div>
         </div>
-        
     </section>
-
-    <!-- ====================== LOADING ====================== -->
     <div class="loading-overlay" id="loadingOverlay" style="display:none;">
         <div class="loading-content">
             <div class="cpu-loader">
@@ -181,13 +160,9 @@
             <p>Running 6 algorithms · AI analyzing workload...</p>
         </div>
     </div>
-
-    <!-- ====================== VIEW: AI RECOMMENDATION ====================== -->
     <section class="view" id="view-ai">
         <div id="aiContent"></div>
     </section>
-
-    <!-- ====================== VIEW: COMPARISON (4 ALGORITHMS GRID) ====================== -->
     <section class="view" id="view-comparison">
         <div class="comparison-toolbar card">
             <div class="card-header">
@@ -205,9 +180,7 @@
                 </div>
             </div>
         </div>
-        
         <div class="comparison-grid" id="comparisonGrid"></div>
-        
         <div class="card">
             <div class="card-header">
                 <div>
@@ -220,8 +193,6 @@
             </div>
         </div>
     </section>
-
-    <!-- ====================== VIEW: CHARTS ====================== -->
     <section class="view" id="view-charts">
         <div class="charts-grid">
             <div class="card chart-card">
@@ -246,8 +217,6 @@
             </div>
         </div>
     </section>
-
-    <!-- ====================== VIEW: 3D ====================== -->
     <section class="view" id="view-3d">
         <div class="card">
             <div class="card-header">
@@ -256,8 +225,6 @@
                     <p class="card-sub">Three.js / WebGL · Drag to rotate, scroll to zoom, right-click to pan</p>
                 </div>
             </div>
-            
-            <!-- Toggle between Gantt 3D and Podium 3D -->
             <div class="three-d-mode-toggle">
                 <button class="three-d-mode-btn active" data-mode="gantt" onclick="window.switch3DMode('gantt')">
                     <span>📊</span> 3D Gantt Chart
@@ -266,10 +233,7 @@
                     <span>🏆</span> 3D Podium · AI Tournament
                 </button>
             </div>
-            
-            <!-- Algorithm selector (only shown for Gantt mode) -->
             <div class="view-3d-algo-selector" id="threeDAlgoSelector"></div>
-            
             <div class="view-3d-container">
                 <div class="view-3d-toolbar">
                     <div class="view-3d-title">
@@ -301,8 +265,6 @@
             </div>
         </div>
     </section>
-
-    <!-- ====================== VIEW: STEP MODE ====================== -->
     <section class="view" id="view-step">
         <div class="card">
             <div class="card-header">
@@ -311,23 +273,17 @@
                     <p class="card-sub">Walk through every CPU tick · See the Ready Queue and CPU state in real-time</p>
                 </div>
             </div>
-            
             <div class="view-3d-algo-selector" id="stepAlgoSelector"></div>
-            
             <div id="stepSimContainer"></div>
         </div>
     </section>
-
-    <!-- ====================== VIEW: DETAILS ====================== -->
     <section class="view" id="view-details">
         <div class="card">
             <div class="tabs" id="detailsTabs"></div>
             <div id="detailsContent"></div>
         </div>
     </section>
-
 </main>
-
 <script src="assets/js/audio.js"></script>
 <script src="assets/js/gantt.js"></script>
 <script src="assets/js/gantt3d.js"></script>
